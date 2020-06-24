@@ -1,0 +1,15 @@
+ ---
+version: "2.1"
+services: 
+  whoogle-search:
+    image: benbusby/whoogle-search
+    container_name: whoogle-search
+    restart: unless-stopped
+    volumes:
+      - ./config:/config 
+    networks:
+      - letsencrypt_default
+    
+networks:
+  letsencrypt_default:
+    external: true
