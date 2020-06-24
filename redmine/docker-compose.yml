@@ -1,0 +1,32 @@
+---
+version: "2.1"
+services: 
+  redmine:
+    image: redmine
+    restart: unless-stopped
+    environment:
+      REDMINE_DB_MYSQL: redmine-db
+      REDMINE_DB_PASSWORD: your_pass # change this
+      REDMINE_SECRET_KEY_BASE: your_secret # change this
+    volumes:
+      - ./files:/usr/src/redmine/files
+      - ./plugins:/plugins # test this
+      - ./themes:/public/themes # test this
+    networks:
+      - letsencrypt_default
+
+  redmine-db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: your_pass # change this to match the above one
+      MYSQL_DATABASE: redmine
+    volumes:
+      - ./db:/var/lib/mysql
+    networks:
+      - letsencrypt_default
+    
+networks:
+  letsencrypt_default:
+    external: true
+ 
