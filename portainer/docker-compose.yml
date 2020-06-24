@@ -1,0 +1,19 @@
+---
+version: "2.1"
+services: 
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - letsencrypt_default
+    
+networks:
+  letsencrypt_default:
+    external: true 
+
+volumes:
+  portainer_data:
