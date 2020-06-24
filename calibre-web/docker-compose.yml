@@ -1,0 +1,21 @@
+---
+version: "2.1"
+services: 
+  calibre-web:
+    image: linuxserver/calibre-web
+    container_name: calibre-web
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - DOCKER_MODS=linuxserver/calibre-web:calibre
+    volumes:
+      - ./config:/config 
+      - ./books:/books # put metadata.db in this folder or in ./config
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+    
+networks:
+  letsencrypt_default:
+    external: true
