@@ -1,0 +1,39 @@
+---
+version: "2.1"
+services: 
+  vikunja-db:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: your_pass # change this
+      MYSQL_DATABASE: vikunja
+    volumes:
+      - ./db:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+    
+  vikunja-api:
+    image: vikunja/api
+    environment:
+      VIKUNJA_DATABASE_HOST: vikunja-db
+      VIKUNJA_DATABASE_PASSWORD: your_pass # change this, match with the above one
+      VIKUNJA_DATABASE_TYPE: mysql
+      VIKUNJA_DATABASE_USER: root
+      VIKUNJA_DATABASE_DATABASE: vikunja
+    volumes: 
+      - ./files:/app/vikunja/files
+    depends_on:
+      - vikunja-db
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+    
+  vikunja-frontend:
+    image: vikunja/frontend
+    restart: unless-stopped 
+    networks:
+      - letsencrypt_default
+    
+networks:
+  letsencrypt_default:
+    external: true
