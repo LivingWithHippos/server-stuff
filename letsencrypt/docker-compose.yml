@@ -1,0 +1,28 @@
+---
+version: "2.1"
+services:
+  letsencrypt:
+    image: linuxserver/letsencrypt
+    container_name: letsencrypt
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - URL= #your url
+      - SUBDOMAINS=www, #your sub-domains, check server_name in the ngix .conf files
+      - VALIDATION=http
+      - EMAIL= #your email
+    volumes:
+      - ./config:/config
+    ports:
+      - 443:443
+      - 80:80 #optional
+    restart: unless-stopped 
+    networks:
+      - letsencrypt_default
+    
+networks:
+  letsencrypt_default:
+    driver: bridge
