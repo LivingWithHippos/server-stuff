@@ -1,6 +1,20 @@
 # Server's Stuff
 A collection of configuration files/scripts for my server.
 
+- [Server's Stuff](#server-s-stuff)
+  * [Linuxserver.io](#linuxserverio)
+  * [How does it work](#how-does-it-work)
+  * [Installation](#installation)
+    + [Docker](#docker)
+    + [Letsencrypt](#letsencrypt)
+      - [Important parameters](#important-parameters)
+    + [NGINX reverse proxy](#nginx-reverse-proxy)
+    + [Applications](#applications)
+    + [DNS settings](#dns-settings)
+    + [Final steps](#final-steps)
+  * [Troubleshooting](#troubleshooting)
+  * [Other apps](#other-apps)
+  
 ## Linuxserver.io
 Using the images provided by [linuxserver.io](https://www.linuxserver.io/) it's pretty easy to set up all the web-apps and services you want on your server.
 External Docker images can be added almost as smoothly and usually require little configuration if any.
@@ -96,7 +110,7 @@ Run `docker-compose up -d` once to generate all the necessary files and the cert
 
 If it does not work, you can check out logs with `docker logs container_name` and get the docker container name with `docker ps`
 
-### NGIX reverse proxy
+### NGINX reverse proxy
 
 If your Letsencrypt container runs correctly, you should now have a `config` folder. Navigate to `config/ngix/proxy-confs` and check the available samples. You can also find them in [this repo.](https://github.com/linuxserver/reverse-proxy-confs) To activate one of these, you can rename it, so it ends with *.conf* after you've modified it. 
 If you use one of the configuration files already in this folder, they're pretty much ready to go, there should be two versions for every app: a *subdomain* and a *subfolder* one. They will result in `app.mycooldomain.com` or `mycooldomain.com/app`, and please use only one of them.
@@ -145,7 +159,7 @@ Run this checklist:
 
 Run again `docker-compose up -d` for Letsencrypt *docker-compose.yml* and then for every other compose file (if any). You can now check every subdomain/subfolder.
 
-### Troubleshooting
+## Troubleshooting
 
 * You can check the status of your containers with `docker ps` and their logs with `docker logs container_name`
 * Nginx logs are under our *letsencrypt/config/log/nginx/* directory
