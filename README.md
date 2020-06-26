@@ -150,6 +150,9 @@ They can be easily added to ngix/letsencrypt:
 * navigate to *letsencrypt/config/ngix/site-confs*
 * create a *.conf* file with your app name (the *default* file here has some examples) 
 
+
+This is the *my-mind.conf* file for [my-mynd:](https://github.com/ondras/my-mind)
+
 ```
 server {
        listen 443 ssl http2;
