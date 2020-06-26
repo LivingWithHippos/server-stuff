@@ -1,5 +1,5 @@
 # Server's Stuff
-A collection of configuration files/scripts for my server.
+This repo is a collection of configuration files/scripts for my server. This down here is a general explanation of how everything works. Every app's folder has a README.md with more specific information.
 
 - [Server's Stuff](#server-s-stuff)
   * [Linuxserver.io](#linuxserverio)
@@ -10,6 +10,7 @@ A collection of configuration files/scripts for my server.
       - [Important parameters](#important-parameters)
     + [NGINX reverse proxy](#nginx-reverse-proxy)
     + [Applications](#applications)
+    + [Websites and Web-apps](#websites-and-web-apps)
     + [DNS settings](#dns-settings)
     + [Final steps](#final-steps)
   * [Troubleshooting](#troubleshooting)
@@ -135,7 +136,65 @@ You can add many external apps by copying a sample *.conf* file and editing thes
 
 You can get a list of Linuxserver's applications [here](https://fleet.linuxserver.io/?key=10:linuxserver) or check their [repositories](https://github.com/linuxserver) on Github. Check the docker-compose section (like [this](https://github.com/linuxserver/docker-calibre-web#docker-compose)), copy and paste it as explained before and we're almost ready.
 
-Check the other apps section for info on other applications outside these.
+Check the [other apps](#other-apps) section for info on other applications' collections.
+
+### Websites and Web-apps
+
+Websites and Web-apps
+
+You may want to host a site using this setup, or maybe a web-app is not available as Docker container but as an Html + CSS + javascript build.
+They can be easily added to ngix/letsencrypt:
+
+* add to your SUBDOMAINS the subdomain as before
+* drop the web-app under a folder in *letsencrypt/config/www*
+* navigate to *letsencrypt/config/ngix/site-confs*
+* create a *.conf* file with your app name (the *default* file here has some examples) 
+
+```
+server {
+       listen 443 ssl http2;
+       listen [::]:443 ssl http2;
+
+       root /config/www/my-mind;
+       index index.html index.htm index.php;
+
+       server_name my-mind.*;
+
+       include /config/nginx/ssl.conf;
+
+       client_max_body_size 0;
+
+       location / {
+               auth_basic "Restricted";
+               auth_basic_user_file /config/nginx/.htpasswd;
+               include /config/nginx/proxy.conf;
+               try_files $uri $uri/ /index.html /index.php?$args =404;
+       }
+}
+```
+How to configure it:
+
+`       root /config/www/my-mind;`
+
+Point this to the folder of your web-app containing the entry file (*index.html*, *index.htm*, *index.php* or whatever).
+
+`       server_name my-mind.*;`
+
+As before, this is where you'll browse to access the app.
+
+```
+               auth_basic "Restricted";
+               auth_basic_user_file /config/nginx/.htpasswd;
+```
+This is optional. It adds a password to access the app. Since many websites/web-apps do not have a login option, this can be used to restrict access.
+If you decide to use this, you need to create the credentials, see [here](https://github.com/linuxserver/docker-letsencrypt#security-and-password-protection).
+You have to run the command
+`docker exec -it letsencrypt htpasswd -c /config/nginx/.htpasswd <username>`
+and you'll be asked for a new password.
+You'll also need to restart the Letsencrypt's container (but complete the configuration first).
+
+More details on:
+* https://blog.linuxserver.io/2019/04/25/letsencrypt-nginx-starter-guide/#simplehtmlwebpagehosting
 
 ### DNS settings
 
@@ -154,7 +213,8 @@ Run this checklist:
 
 - [ ] Letsencrypt *docker-compose.yml* configured and executed correctly
 - [ ] ngix *.conf* renamed/configured under the `proxy-confs` folder
-- [ ] every app *docker-compose.yml* configured
+- [ ] every app's *docker-compose.yml* configured
+- [ ] ngix *.conf* configured under the `site-confs` folder and files dropped under `config/www` for evey website/webapp
 - [ ] dns record ready
 
 Run again `docker-compose up -d` for Letsencrypt *docker-compose.yml* and then for every other compose file (if any). You can now check every subdomain/subfolder.
@@ -162,6 +222,7 @@ Run again `docker-compose up -d` for Letsencrypt *docker-compose.yml* and then f
 ## Troubleshooting
 
 * You can check the status of your containers with `docker ps` and their logs with `docker logs container_name`
+* You can restart your containers with `docker restart container_name`
 * Nginx logs are under our *letsencrypt/config/log/nginx/* directory
 * if you changed the DNS records, you may need to wait some time for them to propagate
 
