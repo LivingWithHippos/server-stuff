@@ -14,8 +14,8 @@ This repo is a collection of configuration files/scripts for my server. This dow
     + [DNS settings](#dns-settings)
     + [Final steps](#final-steps)
   * [Troubleshooting](#troubleshooting)
-  * [Extra: Startpage](#extra--startpage)
-  * [Extra: Other apps](#extra--other-apps)
+  * [Extra: Startpage](#extra-startpage)
+  * [Extra: Other apps](#extra-other-apps)
   
 ## Linuxserver.io
 Using the images provided by [linuxserver.io](https://www.linuxserver.io/) it's pretty easy to set up all the web-apps and services you want on your server.
