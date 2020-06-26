@@ -7,14 +7,15 @@ This repo is a collection of configuration files/scripts for my server. This dow
   * [Installation](#installation)
     + [Docker](#docker)
     + [Letsencrypt](#letsencrypt)
-      - [Important parameters](#important-parameters)
+      - [Important parameters:](#important-parameters)
     + [NGINX reverse proxy](#nginx-reverse-proxy)
     + [Applications](#applications)
     + [Websites and Web-apps](#websites-and-web-apps)
     + [DNS settings](#dns-settings)
     + [Final steps](#final-steps)
   * [Troubleshooting](#troubleshooting)
-  * [Other apps](#other-apps)
+  * [Extra: Startpage](#extra--startpage)
+  * [Extra: Other apps](#extra--other-apps)
   
 ## Linuxserver.io
 Using the images provided by [linuxserver.io](https://www.linuxserver.io/) it's pretty easy to set up all the web-apps and services you want on your server.
@@ -229,7 +230,11 @@ Run again `docker-compose up -d` for Letsencrypt *docker-compose.yml* and then f
 * Nginx logs are under our *letsencrypt/config/log/nginx/* directory
 * if you changed the DNS records, you may need to wait some time for them to propagate
 
+## Extra: Startpage
 
+When you start having more and more apps installed on your server, you may want to have a home to select the right one. There are specialized apps, such as [Heimdall](https://github.com/linuxserver/Heimdall), or you can get a static page. On [reddit](https://reddit.com/r/startpages/), there are many of them with all the code included.
 
-## Other apps
+![https://old.reddit.com/r/startpages/comments/f6hfoq/term_tree/](https://i.redd.it/eb3j7xhk1yh41.png)
+
+## Extra: Other apps
 [Awesome selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted) is a curated list of app you can self-host. The easiest way to integrate them with your docker is by looking up on your favorite search engine "docker-compose appname"
