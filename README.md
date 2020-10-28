@@ -73,7 +73,7 @@ I added to the default linuxserver.io compose file a network. Since Letsencrypt'
 * put everything in the same *docker-compose.yml* file, a single network will be created and connect all of them
 * manually choose a network and set it in every *docker-compose.yml* file
 
-I'm using a single compose file because I didn't know yet about this when I first built the server, but on this repo, I'm using option 2 (__N.B. not tested yet__).
+I'm using a single compose file because I didn't know yet about this when I first built the server, but I'm moving towards option 2.
 
 Network creation under Letsencrypt/Swag compose file:
 
@@ -121,6 +121,12 @@ If you use one of the configuration files already in this folder, they're pretty
 For a subdomain config file these are the essential parameters:
 
 `    server_name portainer.*;`
+
+Or
+
+`    server_name portainer.mydomain.com;`
+
+if you have multiple domains on your server.
 
 This will tell Nginx which subdomain should route the container stuff, can be changed without issues (remember to add it to SUBDOMAINS)
 
