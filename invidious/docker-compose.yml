@@ -1,0 +1,47 @@
+version: '3'
+services:
+  invidious:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    environment:
+      # Adapted from ./config/config.yml
+      INVIDIOUS_CONFIG: |
+        channel_threads: 1
+        check_tables: true
+        feed_threads: 1
+        db:
+          user: --my user--
+          password: --my password--
+          host: postgres
+          port: 5432
+          dbname: --my db--
+        full_refresh: false
+        https_only: false
+        domain: --my domain--
+    depends_on:
+      - postgres
+    networks:
+      - letsencrypt_default
+
+
+  postgres:
+    image: postgres:10
+    restart: unless-stopped
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/config/sql:/config/sql
+      - ./postgres/docker/init-invidious-db.sh:/docker-entrypoint-initdb.d/init-invidious-db.sh
+    environment:
+      POSTGRES_DB: --my db--
+      POSTGRES_PASSWORD: --my password--
+      POSTGRES_USER: --my user--
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+    networks:
+      - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true

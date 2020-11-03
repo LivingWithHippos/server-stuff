@@ -1,0 +1,31 @@
+version: '3'
+services:
+  nginx-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./config.json:/app/config/production.json
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    restart: unless-stopped
+    networks:
+          - letsencrypt_default
+  ngindb:
+    image: 'jc21/mariadb-aria:10.4'
+    environment:
+      MYSQL_ROOT_PASSWORD: "-EDIT THIS-"
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "-EDIT THIS-"
+    restart: unless-stopped
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+          - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true

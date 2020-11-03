@@ -1,0 +1,28 @@
+version: '3'
+services:
+  searx:
+    image: hoellen/searx:master
+    container_name: searx
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+    environment:
+      - BASE_URL="--SET ME--"
+
+  filtron:
+    container_name: filtron
+    image: dalf/filtron
+    restart: unless-stopped
+    ports:
+      - 3040:3040
+      - 3041:3041
+    command: -listen 0.0.0.0:3040 -api 0.0.0.0:3041 -target searx:8888
+    volumes:
+      - ./rules.json:/etc/filtron/rules.json:rw
+    read_only: true
+    networks:
+      - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true

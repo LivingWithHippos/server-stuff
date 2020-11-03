@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+
+  ghost:
+    image: ghost:3-alpine
+    volumes:
+      - ./content:/var/lib/ghost/content
+    environment:
+      # see https://docs.ghost.org/docs/config#section-running-ghost-with-config-env-variables
+      url: http://my-url.tld
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true

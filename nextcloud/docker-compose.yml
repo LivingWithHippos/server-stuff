@@ -1,0 +1,39 @@
+---
+version: "2.1"
+services:
+  nextcloud:
+    image: linuxserver/nextcloud
+    container_name: nextcloud
+    env_file:
+      - docker.env
+    depends_on:
+      - mariadb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./config:/config
+      - ./data:/data
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+
+  mariadb:
+    image: linuxserver/mariadb
+    container_name: mariadb
+    env_file:
+      - docker.env
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./db:/config
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true

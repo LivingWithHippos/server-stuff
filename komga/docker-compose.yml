@@ -1,0 +1,25 @@
+---
+version: '3.3'
+services:
+  komga:
+    image: gotson/komga
+    container_name: komga
+    volumes:
+      - type: bind
+        source: ./config
+        target: /config
+      - type: bind
+        source: ./books
+        target: /books
+      - type: bind
+        source: /etc/timezone
+        target: /etc/timezone
+        read_only: true
+    user: "1000:1000"
+    restart: unless-stopped
+    networks:
+          - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true

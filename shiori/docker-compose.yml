@@ -1,0 +1,13 @@
+version: '3'
+services:
+  shiori:
+    image: radhifadlillah/shiori:latest
+    restart: unless-stopped
+    volumes:
+      - ./shiori:/srv/shiori
+    networks:
+      - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true

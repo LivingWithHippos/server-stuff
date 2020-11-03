@@ -1,0 +1,21 @@
+version: "2.1"
+services:
+  code-server:
+    image: linuxserver/code-server
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - PASSWORD=-EDIT THIS-
+    volumes:
+      - ./config:/config
+      # you can mount external folder to edit them from code server
+      - /my/mounted/folder:/config/workspace/my-workspace
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true

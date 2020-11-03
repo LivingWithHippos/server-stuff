@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+  app:
+    image: jc5x/firefly-iii:latest
+    volumes:
+      - ./export:/var/www/firefly-iii/storage/export
+      - ./upload:/var/www/firefly-iii/storage/upload
+    env_file: .env
+    restart: unless-stopped
+    depends_on:
+      - db
+    networks:
+      - letsencrypt_default
+
+  db:
+    image: yobasystems/alpine-mariadb:latest
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_USER=firefly
+      - MYSQL_PASSWORD=-CHANGE THIS-
+      - MYSQL_DATABASE=firefly
+    restart: unless-stopped
+    volumes:
+      - ./db:/var/lib/mysql
+    networks:
+      - letsencrypt_default
+
+  # use this to import csv from firefly or other money managers into your instance
+  importer:
+    image: fireflyiii/csv-importer:latest
+    environment:
+      - FIREFLY_III_ACCESS_TOKEN=mytoken # check the instructions
+      - FIREFLY_III_URI=myuri
+    # since we'll be using this once or twice, there's no need to reverse proxy it
+    ports:
+      - 8081:80
+    networks:
+      - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true

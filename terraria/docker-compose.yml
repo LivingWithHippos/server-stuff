@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  terraria:
+    image: beardedio/terraria:latest
+    restart: unless-stopped
+    # You will need to open a terminal into the container and generate a world first
+    # You can also use this to import a world
+    # environment:
+    #  - world=myWorld.wld
+    ports:
+      - '7777:7777'
+    volumes:
+    # you can put here the myWorld.wld file
+      - ./config:/config
+    tty: true
+    stdin_open: true
+    
+# Can't reverse proxy this, no need to add to the network
