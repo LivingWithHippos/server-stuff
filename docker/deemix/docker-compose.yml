@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+    deemix:
+        image: registry.gitlab.com/bockiii/deemix-docker
+        container_name: deemix
+        volumes:
+            - ./downloads:/downloads
+            - ./config:/config
+        restart: unless-stopped
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - ARL=${ARL}
+            - UMASK_SET=022
+            - DEEZUI=false
+        networks:
+          - letsencrypt_default
+
+
+networks:
+  letsencrypt_default:
+    external: true
