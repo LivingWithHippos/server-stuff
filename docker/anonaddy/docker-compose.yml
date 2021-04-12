@@ -1,0 +1,59 @@
+version: "3.5"
+
+services:
+  db:
+    image: mariadb:10.4
+    container_name: anonaddy_db
+    volumes:
+      - "/data/anonaddy/db:/var/lib/mysql"
+    environment:
+      - "MYSQL_ALLOW_EMPTY_PASSWORD=yes"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
+      - "MYSQL_USER=${MYSQL_USER}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+    restart: unless-stopped
+    networks:
+      - backend
+
+  redis:
+    image: redis:4.0-alpine
+    container_name: anonaddy_redis
+    restart: unless-stopped
+    networks:
+      - backend
+
+  anonaddy:
+    image: anonaddy/anonaddy:latest
+    container_name: anonaddy
+    depends_on:
+      - db
+      - redis
+    ports:
+      - target: 25
+        published: 25
+        protocol: tcp
+#      - target: 8000
+#        published: 8000
+#        protocol: tcp
+    volumes:
+      - "./data:/data"
+      - "./.gnupg:/var/www/.gnupg"
+    env_file:
+      - "./anonaddy.env"
+    environment:
+      - "DB_HOST=db"
+      - "DB_DATABASE=${MYSQL_DATABASE}"
+      - "DB_USERNAME=${MYSQL_USER}"
+      - "DB_PASSWORD=${MYSQL_PASSWORD}"
+      - "REDIS_HOST=redis"
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+      - backend
+    
+networks:
+  letsencrypt_default:
+    external: true
+  backend:
+    name: anonaddy_backend
+    driver: bridge
