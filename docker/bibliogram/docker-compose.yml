@@ -1,0 +1,17 @@
+version: '3'
+services:
+
+  bibliogram:
+    image: cloudrac3r/bibliogram
+    container_name: bibliogram
+    restart: unless-stopped
+    volumes:
+      - ./db:/app/db
+      - ./config.js:/app/config.js
+    networks:
+      - letsencrypt_default
+
+
+networks:
+  letsencrypt_default:
+    external: true
