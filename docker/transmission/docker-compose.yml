@@ -1,0 +1,32 @@
+---
+version: "3"
+services:
+  transmission:
+    image: ghcr.io/linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      # alternative UI
+      - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
+      - USER=${TR_USER}  #optional
+      - PASS=${TR_PASS}  #optional
+      #- WHITELIST=${WHITELIST} #optional
+    volumes:
+      - ./config:/config
+      - ./downloads:/downloads
+      - ./watch:/watch
+    ports:
+    # webui
+    #  - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped 
+    networks:
+      - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true
+    
