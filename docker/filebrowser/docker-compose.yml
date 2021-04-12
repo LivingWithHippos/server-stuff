@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+    filebrowser:
+        image: filebrowser/filebrowser
+        container_name: filebrowser
+        volumes:
+            # mount external folders to make them available
+            # - ../app/downloads:/srv
+            # do a "touch filebrowser.db .filebrowser.json"
+            # filebrowser.db:/database.db
+            # .filebrowser.json:/.filebrowser.json
+        restart: unless-stopped
+        #ports:
+        #  - 80:80
+        networks:
+          - letsencrypt_default
+
+
+networks:
+  letsencrypt_default:
+    external: true
