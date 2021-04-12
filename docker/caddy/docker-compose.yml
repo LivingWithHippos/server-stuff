@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./data:/data
+      - ./config:/config
+      - ./log:/var/log
+      #- /data/caddy/srv:/srv
+      # add here volumes for serving php/websites
+      # - ../Yotter/app:/var/www/yotter
+    restart: unless-stopped
+    networks:
+      - letsencrypt_default
+
+# mount here named volumes for containers that needs to be served with php or as static websites
+#volumes:
+#  kimai_kimai_public:
+#    external: true
+
+networks:
+  letsencrypt_default:
+    external: true
