@@ -1,0 +1,22 @@
+version: "3"
+
+services: 
+  dailynote:
+    container_name: dailynote
+    image: m0ngr31/dailynotes
+    restart: unless-stopped
+    #ports:
+    #    - 5000:5000
+    environment: 
+      API_SECRET_KEY: ${API_KEY}
+      DB_ENCRYPTION_KEY: ${DB_KEY}
+      # comment out this line to enable registration
+      PREVENT_SIGNUPS: 1
+    volumes:
+      - "./config:/app/config"
+    networks:
+      - letsencrypt_default
+
+networks:
+  letsencrypt_default:
+    external: true
