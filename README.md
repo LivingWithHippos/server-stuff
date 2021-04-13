@@ -2,7 +2,6 @@
 This repo is a collection of configuration files/scripts for my server. This down here is a general explanation of how everything works. Every app's folder has a README.md with more specific information.
 
 - [Server's Stuff](#server-s-stuff)
-  * [Linuxserver.io](#linuxserverio)
   * [How does it work](#how-does-it-work)
   * [Installation](#installation)
     + [Docker](#docker)
@@ -17,17 +16,13 @@ This repo is a collection of configuration files/scripts for my server. This dow
   * [Extra: Startpage](#extra-startpage)
   * [Extra: Other apps](#extra-other-apps)
   * [Extra: NGINX Proxy Manager](#extra-nginx-proxy-manager)
-  
-## Linuxserver.io
-Using the images provided by [linuxserver.io](https://www.linuxserver.io/) it's pretty easy to set up all the web-apps and services you want on your server.
-External Docker images can be added almost as smoothly and usually require little configuration if any.
 
 ## How does it work
 First of all, read a tiny little bit about [docker](https://www.docker.com/why-docker) and [docker-compose](https://docs.docker.com/compose/) if you don' t know what they are. 
 
 TL:DR -> Docker is a software to create containers, where we'll put our apps, Compose is a tool for defining and running multi-container Docker applications.
 
-Linuxserver's [swag docker](https://github.com/linuxserver/docker-swag) is the main one; it gives us:
+If you´re on a public server you probably want to piont them to a domain like mycoolapp.mycooldomain.com. The software used to do this is called a reverse proxy and there many of them, nginx, trafik, caddy etc. Linuxserver's [swag docker](https://github.com/linuxserver/docker-swag) is the main one used here; it gives us:
 * free certificates: you get the green lock on your browser, and your web traffic is encrypted 
 * reverse proxy: you can host multiple apps on your domain and reach them with subdomain/subfolders
 
@@ -42,7 +37,7 @@ Install [Docker](https://hub.docker.com/search?q=&type=edition&offering=communit
 
 ### Letsencrypt
 Create a new *docker-compose.yml* file under a Letsencrypt folder and paste the content from [here](https://github.com/linuxserver/docker-swag#usage) in it.
-You need to fill it with your information. You can also check how [mine](https://github.com/LivingWithHippos/server-stuff/tree/master/letsencrypt) is (more or less).
+You need to fill it with your information. You can also check how [mine](https://github.com/LivingWithHippos/server-stuff/tree/master/docker/letsencrypt) is (more or less).
 
 #### Important parameters:
 
@@ -56,7 +51,7 @@ Set your main domain here
 
 `      - SUBDOMAINS=www,`
 
-Set your sub-domains here. These are the ones you want to provide https for, and they need to be the same used in the various Ngix *.conf* files. For example, if I want to install [portainer](https://www.portainer.io/) and my *portainer.subdomain.conf* contains the line `    server_name portainer.*;` I will need to set it as `      - SUBDOMAINS=www,portainer`. They can be easily switched to anything you want, like `    server_name coffee.*;` and `      - SUBDOMAINS=www,coffee`, making it reachable under `coffee.mycooldomain.com`. Extra subdomains are not a problem. If you want to put your applications under a subfolder of your main domain, like `mycooldomain.com/coffee`, you don't need to add them under `SUBDOMAINS`.
+Set your sub-domains here. These are the ones you want to provide https for, and they need to be the same used in the various Ngix *.conf* files. For example, if I want to install [portainer](https://www.portainer.io/) and my *portainer.subdomain.conf* contains the line `    server_name portainer.*;` I will need to set it as `      - SUBDOMAINS=www,portainer`. They can be easily switched to anything you want, like `    server_name coffee.*;` and `      - SUBDOMAINS=www,coffee`, making it reachable under `coffee.mycooldomain.com`. Extra subdomains are not a problem. If you want to put your applications under a subfolder of your main domain, like `mycooldomain.com/coffee`, you don't need to add them under `SUBDOMAINS`. Subfolders are harder to set up so I´d avoid them where possible.
 
 `      --e EMAIL=`
 
@@ -241,11 +236,14 @@ Run again `docker-compose up -d` for Letsencrypt *docker-compose.yml* and then f
 
 When you start having more and more apps installed on your server, you may want to have a home to select the right one. There are specialized apps, such as [Heimdall](https://github.com/linuxserver/Heimdall), or you can get a static page. On [reddit](https://reddit.com/r/startpages/), there are many of them with all the code included.
 
-![https://old.reddit.com/r/startpages/comments/f6hfoq/term_tree/](https://i.redd.it/eb3j7xhk1yh41.png)
+![https://github.com/dbuxy218/Prismatic-Night](https://i.redd.it/3r9b1mtgh4751.png)
 
 ## Extra: Other apps
+
+Using the images provided by [linuxserver.io](https://www.linuxserver.io/) it's pretty easy to set up all the web-apps and services you want on your server.
+External Docker images can be added almost as smoothly and usually require little configuration if any. You can check on github if the project has a `docker-compose.yml` file or go directly on the [docker hub](https://hub.docker.com/). Be careful of unofficial images on the hub, use the official ones where possible.
 [Awesome selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted) is a curated list of app you can self-host. The easiest way to integrate them with your docker is by looking up on your favorite search engine "docker-compose appname"
 
 
 ## Extra: NGINX Proxy Manager
-[NGINX Proxy Manager](https://github.com/jc21/nginx-proxy-manager) is a graphical tool to manage NGINX. You can avoid the swag/letsencrypt container using this. It's easy to use but you need to know a little about NGINX so you should start with swag first.
+[NGINX Proxy Manager](https://github.com/jc21/nginx-proxy-manager) is a graphical tool to manage NGINX. You can avoid the swag/letsencrypt container using this. It's easy to use but you won´t learn anything about reverse proxies so you should start with swag first.
